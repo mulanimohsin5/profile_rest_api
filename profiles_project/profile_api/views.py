@@ -21,7 +21,7 @@ class HelloApiView(APIView):
 
     def post(self, request):
         """
-        - create a hello message with our name.
+        Create a hello message with logged in user name.
         """
         serializer = serializers.HelloSerializer(data=request.data)
         if serializer.is_valid():
