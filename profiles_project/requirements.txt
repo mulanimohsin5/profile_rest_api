@@ -23,3 +23,7 @@ simplejson==3.18.0
 sqlparse==0.4.3
 uritemplate==4.1.1
 urllib3==1.26.13
+Django==4.1.2
+djangorestframework==3.14.0
+pytz==2022.4
+sqlparse==0.4.3
