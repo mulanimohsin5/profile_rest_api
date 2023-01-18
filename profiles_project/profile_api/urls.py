@@ -6,8 +6,9 @@ from .views import HelloApiView, HelloViewSet, UserProfileViewSet, LoginViewSet
 
 router = DefaultRouter()
 router.register('hello_viewset', HelloViewSet, basename='hello_viewset')
-router.register('profile', UserProfileViewSet, basename='user_profile')
+router.register('profile', UserProfileViewSet, basename='profile')
 router.register('login', LoginViewSet, basename='login')
+
 urlpatterns = [
 
     path("", include(router.urls)),
