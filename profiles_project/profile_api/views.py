@@ -1,10 +1,14 @@
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . import serializers
 from .models import UserProfile
+from .permissions import UpdateOwnProfilePerm
 from .serializers import UserProfileSerializer
 
 
@@ -92,7 +96,23 @@ class HelloViewSet(viewsets.ViewSet):
         """Handle remove an object"""
         return Response({"http_request": "DELETE"})
 
-class UserProfileViewset(viewsets.ModelViewSet):
-    """ handles creating and updating profiles."""
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle create & update profile"""
     serializer_class = UserProfileSerializer
     queryset = UserProfile.object.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (UpdateOwnProfilePerm,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email')
+
+
+class LoginViewSet(viewsets.ViewSet):
+    """ Check email & password and return an auth token"""
+
+    serializer_class = AuthTokenSerializer
+    permission_classes = (UpdateOwnProfilePerm,)
+
+    def create(self, request):
+        """ Use the ObtainAuthToken ApiView to validate & create a token"""
+        return ObtainAuthToken().as_view()(request=request._request)
